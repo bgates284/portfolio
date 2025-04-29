@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Portfolio.Models;
 
 namespace Portfolio.Controllers
@@ -21,6 +22,59 @@ namespace Portfolio.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+        public async Task<IActionResult> GetDef(string word)
+        {
+            if (string.IsNullOrEmpty(word))
+            {
+                ViewBag.Definitions = new List<string> { "Please enter a word." };
+                return View("Index");
+            }
+
+            string apiUrl = $"https://api.dictionaryapi.dev/api/v2/entries/en/{word}";
+            List<WordModel> definitions = new List<WordModel>();
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ViewBag.Definitions = new List<string> { "Could not fetch definition." };
+                    return View("Index");
+                }
+
+                var jsonData = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("RESPONSE: "+jsonData);
+                definitions = JsonConvert.DeserializeObject<List<WordModel>>(jsonData);
+
+                if (definitions != null && definitions.Count > 0)
+                {
+                    var allDefinitions = new List<string>();
+
+                    foreach (var meaning in definitions[0].Meanings)
+                    {
+                        foreach (var definition in meaning.Definitions)
+                        {
+                            if (!string.IsNullOrWhiteSpace(definition.DefinitionText))
+                            {
+                                allDefinitions.Add(definition.DefinitionText);
+                            }
+                        }
+                    }
+
+                    ViewBag.Definitions = allDefinitions;
+                }
+                else
+                {
+                    ViewBag.Definitions = new List<string> { "No definition found." };
+                }
+            }
+
+            return View("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

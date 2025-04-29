@@ -28,6 +28,12 @@
                         </li>
                     </ul>
                 </div>
+                <div class="music-player text-center mt-3">
+                    <audio controls autoplay id="audioPlayer">
+                        <source src="https://icecast.radiofrance.fr/francemusiquelajazz-hifi.aac" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
             </div>
         </nav>
     </header>
@@ -42,9 +48,13 @@
             &copy; 2025 - Portfolio - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
