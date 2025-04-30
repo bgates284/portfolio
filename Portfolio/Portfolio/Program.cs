@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Portfolio.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DatanautDb")));
+
 
 var app = builder.Build();
 
