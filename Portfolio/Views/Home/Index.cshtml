@@ -19,3 +19,17 @@
         </ul>
     </div>
 }
+
+
+@if (ViewBag.People != null)
+{
+    <div class="mt-3">
+        <h2>These are people from my Azure SQL Server Database that demonstrates basic usage of EntityFramework:</h2>
+        <ul>
+            @foreach (var person in (IEnumerable<Person>)ViewBag.People)
+            {
+                <li>@($"{person.FirstName} {person.LastName}: {person.Email}")</li>
+            }
+        </ul>
+    </div>
+}
