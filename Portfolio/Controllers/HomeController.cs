@@ -83,6 +83,25 @@ namespace Portfolio.Controllers
             return View("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUp(Person person)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.People.Add(person);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Thanks"); 
+            }
+
+            return View(person);
+        }
+
+        public IActionResult Thanks()
+        {
+            return View(); // Optional simple thank-you view
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
