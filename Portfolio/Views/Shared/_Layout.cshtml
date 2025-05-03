@@ -28,12 +28,6 @@
                         </li>
                     </ul>
                 </div>
-                <div class="music-player text-center mt-3">
-                    <audio controls autoplay id="audioPlayer">
-                        <source src="https://icecast.radiofrance.fr/francemusiquelajazz-hifi.aac" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                </div>
             </div>
         </nav>
     </header>
@@ -49,11 +43,43 @@
         </div>
     </footer>
 
+    <div id="audioContainer" style="position: fixed; bottom: 10px; right: 10px; z-index: 9999; background: white; padding: 10px; border-radius: 10px; box-shadow: 0 0 5px #ccc;">
+        <audio controls autoplay id="audioPlayer">
+            <source id="audioSource" src="https://icecast.radiofrance.fr/fip-midfi.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <select id="stationSelector" class="form-select mt-2">
+            <option value="https://icecast.radiofrance.fr/francemusiquelajazz-hifi.aac">Jazz</option>
+            <option value="https://icecast.radiofrance.fr/fip-midfi.mp3">FIP</option>
+            <option value="https://audio-edge-vqwx4.yyz.g.radiomast.io/ref-128k-mp3-stereo">Audio?</option>
+            <option value="https://audio-edge-qse4n.yyz.g.radiomast.io/ref-128k-mp3-stereo-preroll">Techno?</option>
+            <option value="https://ice-the.musicradio.com/HeartUKMP3">Heart Radio UK</option>
+            <option value="http://edge-bauerall-01-gos2.sharp-stream.com/absoluteradiohigh.aac">Absolute Radio London</option>
+            <option value="https://edge-bauerall-01-gos2.sharp-stream.com/hits.aac">Hits Radio</option>
+            <option value="https://radio.virginradio.co.uk/stream">Virgin Radio</option>
+            <option value="http://ep256.hostingradio.ru:8052/europaplus256.mp3">Радио Европа Плюс - Москва 106.2 FM</option>
+            @* <option value=""></option>  *@
+        </select>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const selector = document.getElementById('stationSelector');
+            const audio = document.getElementById('audioPlayer');
+            const source = document.getElementById('audioSource');
+
+            selector.addEventListener('change', function () {
+                source.src = this.value;
+                audio.load();
+                audio.play();
+            });
+        });
+    </script>
 </body>
 </html>
 

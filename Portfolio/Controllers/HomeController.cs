@@ -99,7 +99,7 @@ namespace Portfolio.Controllers
 
         public IActionResult Thanks()
         {
-            return View(); // Optional simple thank-you view
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
